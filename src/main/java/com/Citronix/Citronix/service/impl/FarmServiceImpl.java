@@ -6,6 +6,8 @@ import com.Citronix.Citronix.service.FarmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FarmServiceImpl implements FarmService {
     @Autowired
@@ -26,5 +28,9 @@ public class FarmServiceImpl implements FarmService {
         farmFind.setCreationDate(farm.getCreationDate());
         farmFind.setFields(farm.getFields());
         return farmRepository.save(farmFind);
+    }
+
+    public List<Farm> getAllFarms() {
+        return farmRepository.findAll();
     }
 }

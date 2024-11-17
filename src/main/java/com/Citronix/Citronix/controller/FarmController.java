@@ -43,4 +43,10 @@ public class FarmController {
         Farm farmUpdated = farmService.updateFarm(farmId, farm);
         return ResponseEntity.status(HttpStatus.OK).body(farmUpdated);
     }
+
+    @GetMapping("/getAllFarms")
+    public ResponseEntity<?> getAllFarms(){
+        List<Farm> farms = farmService.getAllFarms();
+        return ResponseEntity.status(HttpStatus.OK).body(farms);
+    }
 }
