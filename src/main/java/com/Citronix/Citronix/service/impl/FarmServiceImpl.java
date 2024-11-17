@@ -13,4 +13,18 @@ public class FarmServiceImpl implements FarmService {
     public Farm addFarm(Farm farm) {
         return farmRepository.save(farm);
     }
+
+    public Farm getFarmById(int farmId) {
+        return farmRepository.findById(farmId).orElseThrow(() -> new RuntimeException("Farm not found"));
+    }
+
+    public Farm updateFarm(int farmId, Farm farm) {
+        Farm farmFind = getFarmById(farmId);
+        farmFind.setName(farm.getName());
+        farmFind.setArea(farm.getArea());
+        farmFind.setLocation(farm.getLocation());
+        farmFind.setCreationDate(farm.getCreationDate());
+        farmFind.setFields(farm.getFields());
+        return farmRepository.save(farmFind);
+    }
 }
