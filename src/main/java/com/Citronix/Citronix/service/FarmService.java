@@ -4,4 +4,5 @@ import com.Citronix.Citronix.model.Farm;
 
 public interface FarmService {
     Farm addFarm(Farm farm);
+    Farm updateFarm(int farmId, Farm farm);
 }
