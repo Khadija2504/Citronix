@@ -19,7 +19,4 @@ public class Farm {
     private double area;
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL)
-    private List<Field> fields;
-
 }
