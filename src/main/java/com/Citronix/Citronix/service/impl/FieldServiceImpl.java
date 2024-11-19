@@ -18,4 +18,21 @@ public class FieldServiceImpl implements FieldService {
         return fieldRepository.save(field);
     }
 
+    @Override
+    public List<Field> getFields() {
+        return fieldRepository.findAll();
+    }
+
+    @Override
+    public Field updateField(int id, Field field) {
+        Field fieldFind = getField(id);
+        fieldFind.setArea(field.getArea());
+        fieldFind.setFarm(field.getFarm());
+        return fieldRepository.save(fieldFind);
+    }
+
+    @Override
+    public Field getField(int id) {
+        return fieldRepository.getReferenceById(id);
+    }
 }
