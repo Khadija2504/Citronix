@@ -6,20 +6,25 @@ import com.Citronix.Citronix.service.FarmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class FarmServiceImpl implements FarmService {
     @Autowired
     private FarmRepository farmRepository;
+
+    @Override
     public Farm addFarm(Farm farm) {
         return farmRepository.save(farm);
     }
 
+    @Override
     public Farm getFarmById(int farmId) {
         return farmRepository.findById(farmId).orElseThrow(() -> new RuntimeException("Farm not found"));
     }
 
+    @Override
     public Farm updateFarm(int farmId, Farm farm) {
         Farm farmFind = getFarmById(farmId);
         farmFind.setName(farm.getName());
@@ -30,7 +35,24 @@ public class FarmServiceImpl implements FarmService {
         return farmRepository.save(farmFind);
     }
 
+    @Override
     public List<Farm> getAllFarms() {
         return farmRepository.findAll();
     }
+
+    @Override
+    public List<Farm> searchFarms(String search) {
+        return farmRepository.searchFarms(search);
+    }
+
+    @Override
+    public List<Farm> getFarmsByDate(LocalDate date) {
+        return farmRepository.findFarmByCreationDate(date);
+    }
+
+    @Override
+    public List<Farm> getFarmsByArea(double area){
+        return farmRepository.findFarmByArea(area);
+    }
+
 }
