@@ -54,4 +54,10 @@ public class FieldController {
         Field updatedField = fieldService.updateField(fieldId, field);
         return ResponseEntity.status(HttpStatus.OK).body(updatedField);
     }
+
+    @GetMapping("/allFields")
+    public ResponseEntity<?> getAllFields() {
+        List<Field> fields = fieldService.getFields();
+        return ResponseEntity.status(HttpStatus.OK).body(fields);
+    }
 }
