@@ -40,4 +40,24 @@ public class FieldController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdField);
     }
 
+    @PutMapping("/{fieldId}/updateField")
+    public ResponseEntity<?> updateField(@Valid @RequestBody FieldDTO fieldDTO, BindingResult result, @PathVariable int fieldId) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+        Field field = new Field();
+        field.setArea(fieldDTO.getArea());
+        field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
+        Field updatedField = fieldService.updateField(fieldId, field);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedField);
+    }
+
+    @GetMapping("/allFields")
+    public ResponseEntity<?> getAllFields() {
+        List<Field> fields = fieldService.getFields();
+        return ResponseEntity.status(HttpStatus.OK).body(fields);
+    }
 }
