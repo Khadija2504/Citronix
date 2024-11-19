@@ -11,6 +11,4 @@ public interface FarmService {
     List<Farm> getAllFarms();
     List<Farm> searchFarms(String search);
     Farm getFarmById(int farmId);
-    List<Farm> getFarmsByDate(LocalDate date);
-    List<Farm> getFarmsByArea(double area);
 }

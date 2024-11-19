@@ -31,7 +31,6 @@ public class FarmServiceImpl implements FarmService {
         farmFind.setArea(farm.getArea());
         farmFind.setLocation(farm.getLocation());
         farmFind.setCreationDate(farm.getCreationDate());
-        farmFind.setFields(farm.getFields());
         return farmRepository.save(farmFind);
     }
 
@@ -44,15 +43,4 @@ public class FarmServiceImpl implements FarmService {
     public List<Farm> searchFarms(String search) {
         return farmRepository.searchFarms(search);
     }
-
-    @Override
-    public List<Farm> getFarmsByDate(LocalDate date) {
-        return farmRepository.findFarmByCreationDate(date);
-    }
-
-    @Override
-    public List<Farm> getFarmsByArea(double area){
-        return farmRepository.findFarmByArea(area);
-    }
-
 }

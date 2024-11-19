@@ -11,9 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,19 +66,8 @@ public class FarmController {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchFarm(@RequestParam String search) {
-        List<Farm> farms;
 
-        try {
-            double value = Double.parseDouble(search);
-            farms = farmService.getFarmsByArea(value);
-        } catch (NumberFormatException e1) {
-            try {
-                LocalDate date = LocalDate.parse(search, DateTimeFormatter.ISO_DATE);
-                farms = farmService.getFarmsByDate(date);
-            } catch (DateTimeParseException e2) {
-                farms = farmService.searchFarms(search);
-            }
-        }
+        List<Farm> farms = farmService.searchFarms(search);
 
         return farms.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No farms found for " + search)
