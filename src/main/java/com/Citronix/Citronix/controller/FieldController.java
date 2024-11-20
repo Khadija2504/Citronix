@@ -32,12 +32,18 @@ public class FieldController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Field field = new Field();
-        field.setArea(fieldDTO.getArea());
-        field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
+        try {
+            Field field = new Field();
+            field.setArea(fieldDTO.getArea());
+            field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
 
-        Field createdField = fieldService.addField(field);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdField);
+            Field createdField = fieldService.addField(field);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdField);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
+
     }
 
     @PutMapping("/{fieldId}/updateField")
