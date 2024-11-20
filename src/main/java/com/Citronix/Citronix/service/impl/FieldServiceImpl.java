@@ -24,18 +24,22 @@ public class FieldServiceImpl implements FieldService {
 
         List<Field> fields = fieldRepository.findByFarm(farm);
         double totalFieldsArea = 0.0;
+        double totalFields = 0;
         if (!fields.isEmpty()) {
             totalFieldsArea = fields.stream()
                     .mapToDouble(Field::getArea)
                     .sum();
+            totalFields = fields.size();
         }
 
         if (totalFieldsArea + field.getArea() > farm.getArea()) {
             throw new IllegalArgumentException("The total area of fields exceeds the farm's area.");
         }
+        if(totalFields >= 2) {
+            throw new IllegalArgumentException("The total fields exceeds 10 fields.");
+        }
         return fieldRepository.save(field);
     }
-
 
     @Override
     public List<Field> getFields() {
