@@ -22,6 +22,14 @@ public class FieldServiceImpl implements FieldService {
             throw new IllegalArgumentException("Field must be associated with a valid farm.");
         }
 
+        if (field.getArea() < 0.1) {
+            throw new IllegalArgumentException("the field must have an area of at least 0.1 hec");
+        }
+
+        if (field.getArea() > (farm.getArea() / 2)) {
+            throw new IllegalArgumentException("the field must not exceed 50% of the total farm's area");
+        }
+
         List<Field> fields = fieldRepository.findByFarm(farm);
         double totalFieldsArea = 0.0;
         double totalFields = 0;
@@ -53,6 +61,14 @@ public class FieldServiceImpl implements FieldService {
 
         if (farm == null) {
             throw new IllegalArgumentException("Field must be associated with a valid farm.");
+        }
+
+        if (field.getArea() < 0.1) {
+            throw new IllegalArgumentException("the field must have an area of at least 0.1 hec");
+        }
+
+        if (field.getArea() > (farm.getArea() / 2)) {
+            throw new IllegalArgumentException("the field must not exceed 50% of the total farm's area");
         }
 
         List<Field> fields = fieldRepository.findByFarm(farm);
