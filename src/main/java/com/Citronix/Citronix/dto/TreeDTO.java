@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.dto;
 
+import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.model.enums.TreeStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -23,4 +24,5 @@ public class TreeDTO {
     @NotNull(message = "L'identifiant du champ ne peut pas être nul.")
     private int fieldId;
 
+    private FieldDTO fields;
 }

@@ -36,11 +36,14 @@ public class TreeController {
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
+
         Tree tree = new Tree();
         tree.setPlantingDate(treeDTO.getPlantingDate());
         tree.setField(fieldService.getField(treeDTO.getFieldId()));
+
         treeService.addtree(tree);
-        CalcTreeAgeUtil.productivity(tree);
-        return ResponseEntity.status(HttpStatus.CREATED).body(CalcTreeAgeUtil.productivity(tree));
+        TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(tree);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseTreeDTO);
     }
+
 }

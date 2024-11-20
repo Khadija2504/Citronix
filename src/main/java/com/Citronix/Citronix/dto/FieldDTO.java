@@ -17,5 +17,6 @@ public class FieldDTO {
     @NotNull(message = "L'identifiant de la ferme ne peut pas être nul.")
     private int farmId;
 
-    private List<Long> treeIds;
+    FarmDTO farm;
+
 }
