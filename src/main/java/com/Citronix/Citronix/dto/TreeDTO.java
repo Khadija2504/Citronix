@@ -16,15 +16,11 @@ public class TreeDTO {
     @Past(message = "La date de plantation doit être dans le passé.")
     private LocalDate plantingDate;
 
-    @NotNull(message = "L'âge ne peut pas être nul.")
     private int age;
 
-    @NotNull(message = "Le statut de l'arbre ne peut pas être nul.")
     private TreeStatus status;
 
     @NotNull(message = "L'identifiant du champ ne peut pas être nul.")
     private int fieldId;
-
-    private List<Long> harvestDetailIds;
 
 }

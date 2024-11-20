@@ -16,8 +16,8 @@ public class Tree {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate plantingDate;
-    private int age;
-    private TreeStatus status;
+//    private int age;
+//    private TreeStatus status;
 
     @ManyToOne
     @JoinColumn(name = "field_id")
