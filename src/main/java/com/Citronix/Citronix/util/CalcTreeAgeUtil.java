@@ -3,14 +3,11 @@ package com.Citronix.Citronix.util;
 import com.Citronix.Citronix.dto.FarmDTO;
 import com.Citronix.Citronix.dto.FieldDTO;
 import com.Citronix.Citronix.dto.TreeDTO;
-import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.model.Tree;
 import com.Citronix.Citronix.model.enums.TreeStatus;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CalcTreeAgeUtil {
     public static int calcTreeAge(LocalDate plantingDate) {
@@ -30,6 +27,10 @@ public class CalcTreeAgeUtil {
 
         int age = calcTreeAge(tree.getPlantingDate());
         treeDTO.setAge(age);
+
+        if (age >= 20) {
+            treeDTO.setAlert("the tree with id " + tree.getId() + " has reached age 20 or older and is no longer productive");
+        }
 
         TreeStatus status;
         if (age < 3) {
