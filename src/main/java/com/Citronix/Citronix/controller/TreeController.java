@@ -34,13 +34,17 @@ public class TreeController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Tree tree = new Tree();
-        tree.setPlantingDate(treeDTO.getPlantingDate());
-        tree.setField(fieldService.getField(treeDTO.getFieldId()));
+        try{
+            Tree tree = new Tree();
+            tree.setPlantingDate(treeDTO.getPlantingDate());
+            tree.setField(fieldService.getField(treeDTO.getFieldId()));
 
-        treeService.addtree(tree);
-        TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(tree);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseTreeDTO);
+            treeService.addtree(tree);
+            TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(tree);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseTreeDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping("/displayAllTrees")
