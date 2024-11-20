@@ -25,4 +25,6 @@ public class TreeDTO {
     private int fieldId;
 
     private FieldDTO fields;
+
+    private String alert;
 }
