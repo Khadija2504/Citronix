@@ -2,8 +2,10 @@ package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.TreeDTO;
 import com.Citronix.Citronix.model.Tree;
+import com.Citronix.Citronix.model.enums.TreeStatus;
 import com.Citronix.Citronix.service.FieldService;
 import com.Citronix.Citronix.service.TreeService;
+import com.Citronix.Citronix.util.CalcTreeAgeUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +39,8 @@ public class TreeController {
         Tree tree = new Tree();
         tree.setPlantingDate(treeDTO.getPlantingDate());
         tree.setField(fieldService.getField(treeDTO.getFieldId()));
-        Tree createdTree = treeService.addtree(tree);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTree);
+        treeService.addtree(tree);
+        CalcTreeAgeUtil.productivity(tree);
+        return ResponseEntity.status(HttpStatus.CREATED).body(CalcTreeAgeUtil.productivity(tree));
     }
 }

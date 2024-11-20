@@ -3,10 +3,14 @@ spring:
     name: Citronix
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/Citronix
+    url: jdbc:postgresql://localhost:5432/citronix
     username: postgres
     password: 123456789
     driver-class-name: org.postgresql.Driver
 
-  jta:
-    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
