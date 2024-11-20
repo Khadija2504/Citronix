@@ -6,6 +6,7 @@ import com.Citronix.Citronix.service.TreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -15,6 +16,12 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public Tree addtree(Tree tree) {
+        LocalDate plantingDate = tree.getPlantingDate();
+        int plantingMonth = plantingDate.getMonthValue();
+
+        if (plantingMonth < 3 || plantingMonth > 5) {
+            throw new IllegalArgumentException("the trees should be planted between march and may");
+        }
         return treeRepository.save(tree);
     }
 
@@ -28,6 +35,11 @@ public class TreeServiceImpl implements TreeService {
         Tree treeFind = getTree(id);
         treeFind.setPlantingDate(tree.getPlantingDate());
         treeFind.setField(tree.getField());
+        LocalDate plantingDate = tree.getPlantingDate();
+        int plantingMonth = plantingDate.getMonthValue();
+        if (plantingMonth < 3 || plantingMonth > 5) {
+            throw new IllegalArgumentException("the trees should be planted between march and may");
+        }
         return treeRepository.save(treeFind);
     }
 
