@@ -18,6 +18,7 @@ public class Harvest {
     private int id;
     private LocalDate harvestDate;
     private double totalQuantity;
+    @Enumerated(EnumType.STRING)
     private Season season;
 
     @ManyToOne

@@ -45,8 +45,10 @@ public class HarvestController {
 
             HarvestDTO responseDTO = harvestMapper.toDto(createdHarvest);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error recording harvest: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
