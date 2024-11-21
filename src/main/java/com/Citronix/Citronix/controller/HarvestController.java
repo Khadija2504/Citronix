@@ -51,4 +51,33 @@ public class HarvestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PutMapping("/{harvestId}/updateHarvest")
+    public ResponseEntity<?> updateHarvest(@Valid @RequestBody HarvestDTO harvestDTO, BindingResult result, @PathVariable int harvestId) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        try {
+            Harvest harvest = harvestMapper.toEntity(harvestDTO);
+            harvest.setField(fieldService.getField(harvestDTO.getFieldId()));
+            Harvest updatedHarvest = harvestService.updateHarvest(harvestId, harvest);
+
+            HarvestDTO responseDTO = harvestMapper.toDto(updatedHarvest);
+            return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/displayAllHarvests")
+    public ResponseEntity<?> displayAllHarvests() {
+        List<Harvest> harvests = harvestService.displayAll();
+        return ResponseEntity.status(HttpStatus.OK).body(harvests);
+    }
 }
