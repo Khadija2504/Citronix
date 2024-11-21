@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.model.Tree;
 import com.Citronix.Citronix.repository.TreeRepository;
 import com.Citronix.Citronix.service.TreeService;
@@ -21,6 +22,14 @@ public class TreeServiceImpl implements TreeService {
 
         if (plantingMonth < 3 || plantingMonth > 5) {
             throw new IllegalArgumentException("the trees should be planted between march and may");
+        }
+
+        Field field = tree.getField();
+        double fieldAreaInHectares = field.getArea();
+        long currentTreeCount = treeRepository.findByField(field).size();
+
+        if ((currentTreeCount + 1) > (fieldAreaInHectares * 100)) {
+            throw new IllegalArgumentException("the max trees of 100 trees per hectare is exceeded for this field");
         }
         return treeRepository.save(tree);
     }
