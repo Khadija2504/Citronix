@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.TreeDTO;
+import com.Citronix.Citronix.mapper.TreeMapper;
 import com.Citronix.Citronix.model.Tree;
 import com.Citronix.Citronix.model.enums.TreeStatus;
 import com.Citronix.Citronix.service.FieldService;
@@ -25,6 +26,9 @@ public class TreeController {
     @Autowired
     private FieldService fieldService;
 
+    @Autowired
+    private TreeMapper treeMapper;
+
     @PostMapping("/addTree")
     public ResponseEntity<?> addTree(@Valid @RequestBody TreeDTO treeDTO, BindingResult result) {
         if (result.hasErrors()) {
@@ -34,13 +38,11 @@ public class TreeController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        try{
-            Tree tree = new Tree();
-            tree.setPlantingDate(treeDTO.getPlantingDate());
+        try {
+            Tree tree = treeMapper.toEntity(treeDTO);
             tree.setField(fieldService.getField(treeDTO.getFieldId()));
-
-            treeService.addtree(tree);
-            TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(tree);
+            Tree createdTree = treeService.addtree(tree);
+            TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(createdTree);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseTreeDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -60,21 +62,18 @@ public class TreeController {
     @PutMapping("/{treeId}/updateTree")
     public ResponseEntity<?> updateTree(@Valid @RequestBody TreeDTO treeDTO, BindingResult result, @PathVariable int treeId) {
         if (result.hasErrors()) {
-            if (result.hasErrors()) {
-                List<String> errors = result.getFieldErrors().stream()
-                        .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                        .collect(Collectors.toList());
-                return ResponseEntity.badRequest().body(errors);
-            }
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
-        try{
-            Tree tree = new Tree();
-            tree.setPlantingDate(treeDTO.getPlantingDate());
-            tree.setField(fieldService.getField(treeDTO.getFieldId()));
-            treeService.updateTree(treeId, tree);
 
-            TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(tree);
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseTreeDTO);
+        try {
+            Tree tree = treeMapper.toEntity(treeDTO);
+            tree.setField(fieldService.getField(treeDTO.getFieldId()));
+            Tree updatedTree = treeService.updateTree(treeId, tree);
+            TreeDTO responseTreeDTO = CalcTreeAgeUtil.productivity(updatedTree);
+            return ResponseEntity.status(HttpStatus.OK).body(responseTreeDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
