@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.FieldDTO;
+import com.Citronix.Citronix.mapper.FieldMapper;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.service.FarmService;
@@ -23,6 +24,9 @@ public class FieldController {
     @Autowired
     private FarmService farmService;
 
+    @Autowired
+    private FieldMapper fieldMapper;
+
     @PostMapping("/addField")
     public ResponseEntity<?> addField(@Valid @RequestBody FieldDTO fieldDTO, BindingResult result) {
         if (result.hasErrors()) {
@@ -33,17 +37,17 @@ public class FieldController {
         }
 
         try {
-            Field field = new Field();
-            field.setArea(fieldDTO.getArea());
-            field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
+            Field field = fieldMapper.toEntity(fieldDTO);
 
+            field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
             Field createdField = fieldService.addField(field);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdField);
+
+            FieldDTO responseDTO = fieldMapper.toDTO(createdField);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-
-
     }
 
     @PutMapping("/{fieldId}/updateField")
@@ -54,11 +58,20 @@ public class FieldController {
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
-        Field field = new Field();
-        field.setArea(fieldDTO.getArea());
-        field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
-        Field updatedField = fieldService.updateField(fieldId, field);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedField);
+
+        try {
+            Field field = fieldMapper.toEntity(fieldDTO);
+
+            field.setFarm(farmService.getFarmById(fieldDTO.getFarmId()));
+
+            Field updatedField = fieldService.updateField(fieldId, field);
+
+            FieldDTO responseDTO = fieldMapper.toDTO(updatedField);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping("/allFields")
