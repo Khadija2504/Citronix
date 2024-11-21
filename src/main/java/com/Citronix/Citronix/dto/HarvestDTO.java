@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.dto;
 
 
+import com.Citronix.Citronix.model.enums.Season;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
