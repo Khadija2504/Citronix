@@ -1,5 +1,7 @@
 package com.Citronix.Citronix.model;
 
+import com.Citronix.Citronix.model.enums.Season;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,12 +18,12 @@ public class Harvest {
     private int id;
     private LocalDate harvestDate;
     private double totalQuantity;
-    private String season;
+    private Season season;
 
     @ManyToOne
     @JoinColumn(name = "field_id")
     private Field field;
 
-    @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL)
-    private List<HarvestDetail> details;
+//    @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL)
+//    private List<HarvestDetail> details;
 }

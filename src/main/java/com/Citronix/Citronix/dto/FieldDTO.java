@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class FieldDTO {
@@ -18,5 +16,4 @@ public class FieldDTO {
     private int farmId;
 
     FarmDTO farm;
-
 }
