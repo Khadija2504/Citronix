@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.FarmDTO;
+import com.Citronix.Citronix.mapper.FarmMapper;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.service.FarmService;
 import jakarta.validation.Valid;
@@ -20,6 +21,9 @@ public class FarmController {
     @Autowired
     private FarmService farmService;
 
+    @Autowired
+    private FarmMapper farmMapper;
+
     @PostMapping("/addFarm")
     public ResponseEntity<?> addFarm(@Valid @RequestBody FarmDTO farmDTO, BindingResult result) {
         if (result.hasErrors()) {
@@ -29,18 +33,16 @@ public class FarmController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Farm farm = new Farm();
-        farm.setName(farmDTO.getName());
-        farm.setArea(farmDTO.getArea());
-        farm.setLocation(farmDTO.getLocation());
-        farm.setCreationDate(farmDTO.getCreationDate());
+        Farm farm = farmMapper.toEntity(farmDTO);
 
-        Farm farmSaved = farmService.addFarm(farm);
-        return ResponseEntity.status(HttpStatus.CREATED).body(farmSaved);
+        Farm savedFarm = farmService.addFarm(farm);
+        FarmDTO savedFarmDTO = farmMapper.toDTO(savedFarm);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedFarmDTO);
     }
 
     @PutMapping("/{farmId}/updateFarm")
-    public ResponseEntity<?> updateFarm(@Valid @RequestBody FarmDTO farmDTO, BindingResult result, @PathVariable int farmId){
+    public ResponseEntity<?> updateFarm(@Valid @RequestBody FarmDTO farmDTO, BindingResult result, @PathVariable int farmId) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -48,14 +50,10 @@ public class FarmController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        Farm farm = new Farm();
-        farm.setName(farmDTO.getName());
-        farm.setArea(farmDTO.getArea());
-        farm.setLocation(farmDTO.getLocation());
-        farm.setCreationDate(farmDTO.getCreationDate());
-
-        Farm farmUpdated = farmService.updateFarm(farmId, farm);
-        return ResponseEntity.status(HttpStatus.OK).body(farmUpdated);
+        Farm farm = farmMapper.toEntity(farmDTO);
+        Farm updatedFarm = farmService.updateFarm(farmId, farm);
+        FarmDTO updatedFarmDTO = farmMapper.toDTO(updatedFarm);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedFarmDTO);
     }
 
     @GetMapping("/getAllFarms")
