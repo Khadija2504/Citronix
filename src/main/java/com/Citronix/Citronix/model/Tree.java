@@ -23,6 +23,4 @@ public class Tree {
     @JoinColumn(name = "field_id")
     private Field field;
 
-    @OneToMany(mappedBy = "tree", cascade = CascadeType.ALL)
-    private List<HarvestDetail> harvestDetails;
 }
