@@ -18,9 +18,6 @@ public class SaleDTO {
     @NotNull(message = "Le prix unitaire ne peut pas être nul.")
     @Positive(message = "Le prix unitaire doit être supérieur à 0.")
     private double unitPrice;
-
-    @NotNull(message = "Le revenu ne peut pas être nul.")
-    @Positive(message = "Le revenu doit être supérieur à 0.")
     private double revenue;
     @NotBlank(message = "Le nom du client ne peut pas être vide.")
     private String customer;
