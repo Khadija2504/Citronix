@@ -35,6 +35,7 @@ public class SaleController {
         }
 
         Sale sale = saleMapper.toEntity(saleDTO);
+        sale.calculateRevenue(harvestService.getHarvestById(saleDTO.getHarvestId()).getTotalQuantity());
         Sale savedSale = saleService.addSale(sale);
         SaleDTO savedSaleDTO = saleMapper.toDto(savedSale);
         return ResponseEntity.status(HttpStatus.OK).body(savedSaleDTO);
@@ -49,6 +50,7 @@ public class SaleController {
             return ResponseEntity.badRequest().body(errors);
         }
         Sale sale = saleMapper.toEntity(saleDTO);
+        sale.calculateRevenue(harvestService.getHarvestById(saleDTO.getHarvestId()).getTotalQuantity());
         Sale updatedSale = saleService.updateSale(id, sale);
         SaleDTO updatedSaleDTO = saleMapper.toDto(updatedSale);
         return ResponseEntity.status(HttpStatus.OK).body(updatedSaleDTO);
