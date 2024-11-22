@@ -22,6 +22,10 @@ public class HarvestDetailServiceImpl implements HarvestDetailService {
         if(harvestFieldId != treeFieldId) {
             throw new IllegalStateException("the tree hasn't the same filed as the harvest");
         }
+        boolean treeInOtherHarvest = harvestDetailRepository.existsByTreeAndHarvest(harvestDetail.getTree(), harvestDetail.getHarvest());
+        if (treeInOtherHarvest) {
+            throw new IllegalStateException("the tree already included in another harvest with the same season");
+        }
         return harvestDetailRepository.save(harvestDetail);
     }
 
