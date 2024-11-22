@@ -6,6 +6,8 @@ import com.Citronix.Citronix.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SaleServiceImpl implements SaleService {
     @Autowired
@@ -29,5 +31,10 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public Sale getSale(int id) {
         return saleRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Sale> getAllSales() {
+        return saleRepository.findAll();
     }
 }

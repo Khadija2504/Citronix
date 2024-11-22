@@ -55,4 +55,10 @@ public class SaleController {
         SaleDTO updatedSaleDTO = saleMapper.toDto(updatedSale);
         return ResponseEntity.status(HttpStatus.OK).body(updatedSaleDTO);
     }
+
+    @GetMapping("/viewSalesHistory")
+    public ResponseEntity<?> viewSalesHistory() {
+        List<Sale> sales = saleService.getAllSales();
+        return ResponseEntity.status(HttpStatus.OK).body(sales);
+    }
 }
