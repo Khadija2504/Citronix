@@ -19,4 +19,6 @@ public class Field {
     @JoinColumn(name = "farm_id")
     private Farm farm;
 
+    public Field(double area, Farm farm) {
+    }
 }
