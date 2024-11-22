@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,5 +52,34 @@ public class HarvestDetailController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    @PutMapping("/{id}/updateHarvestDetail")
+    public ResponseEntity<?> updateHarvestDetail(@Valid @RequestBody HarvestDetailDTO harvestDetailDTO, BindingResult result, @PathVariable int id) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+        try {
+            HarvestDetail harvestDetail = harvestDetailMapper.toEntity(harvestDetailDTO);
+            harvestDetail.setHarvest(harvestService.getHarvestById(harvestDetailDTO.getHarvestId()));
+            harvestDetail.setTree(treeService.getTree(harvestDetailDTO.getTreeId()));
+            HarvestDetail updatedHarvestDetail  = harvestDetailService.updateHarvestDetail(id, harvestDetail);
+            HarvestDetailDTO responseDTO = harvestDetailMapper.toDto(updatedHarvestDetail);
+
+            return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/displayAllHarvestDetails")
+    public ResponseEntity<?> displayAllHarvestDetails() {
+        List<HarvestDetail> harvestDetailList = harvestDetailService.harvestDetailList();
+        return ResponseEntity.status(HttpStatus.OK).body(harvestDetailList);
     }
 }

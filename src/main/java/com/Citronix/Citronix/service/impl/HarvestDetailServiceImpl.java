@@ -7,6 +7,8 @@ import com.Citronix.Citronix.service.HarvestDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HarvestDetailServiceImpl implements HarvestDetailService {
 
@@ -23,7 +25,27 @@ public class HarvestDetailServiceImpl implements HarvestDetailService {
         return harvestDetailRepository.save(harvestDetail);
     }
 
-    public HarvestDetail getHarvestDetailById(int id) {
+    @Override
+    public HarvestDetail getHarvestDetail(int id) {
         return harvestDetailRepository.findById(id).get();
+    }
+
+    @Override
+    public HarvestDetail updateHarvestDetail(int id, HarvestDetail harvestDetail) {
+        HarvestDetail existingHarvestDetail = getHarvestDetail(id);
+        int harvestFieldId = harvestDetail.getHarvest().getField().getId();
+        int treeFieldId = harvestDetail.getTree().getField().getId();
+        if(harvestFieldId != treeFieldId) {
+            throw new IllegalStateException("the tree hasn't the same filed as the harvest");
+        }
+        existingHarvestDetail.setHarvest(harvestDetail.getHarvest());
+        existingHarvestDetail.setTree(harvestDetail.getTree());
+        existingHarvestDetail.setQuantity(harvestDetail.getQuantity());
+        return harvestDetailRepository.save(existingHarvestDetail);
+    }
+
+    @Override
+    public List<HarvestDetail> harvestDetailList() {
+        return harvestDetailRepository.findAll();
     }
 }
