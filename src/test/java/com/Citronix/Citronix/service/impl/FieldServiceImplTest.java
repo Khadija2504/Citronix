@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,14 +98,18 @@ class FieldServiceImplTest {
     @Test
     void testGetFields() {
         List<Field> mockFields = List.of(mockField, new Field(3.0, mockFarm));
-        when(fieldRepository.findAll()).thenReturn(mockFields);
+        Page<Field> mockPage = new PageImpl<>(mockFields);
 
-        List<Field> result = fieldService.getFields();
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
 
-        verify(fieldRepository, times(1)).findAll();
+        when(fieldRepository.findAll(pageable)).thenReturn(mockPage);
+        Page<Field> result = fieldService.getFields(page, size);
 
+        verify(fieldRepository, times(1)).findAll(pageable);
         assertNotNull(result);
-        assertEquals(2, result.size());
+        assertEquals(2, result.getContent().size());
     }
 
     @Test
