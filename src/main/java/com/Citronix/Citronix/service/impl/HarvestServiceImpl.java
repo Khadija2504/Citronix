@@ -4,6 +4,9 @@ import com.Citronix.Citronix.model.Harvest;
 import com.Citronix.Citronix.repository.HarvestRepository;
 import com.Citronix.Citronix.service.HarvestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,7 +46,8 @@ public class HarvestServiceImpl implements HarvestService {
     }
 
     @Override
-    public List<Harvest> displayAll() {
-        return harvestRepository.findAll();
+    public Page<Harvest> displayAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return harvestRepository.findAll(pageable);
     }
 }

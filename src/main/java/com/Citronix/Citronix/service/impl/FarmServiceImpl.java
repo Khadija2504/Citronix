@@ -4,10 +4,8 @@ import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.repository.FarmRepository;
 import com.Citronix.Citronix.service.FarmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class FarmServiceImpl implements FarmService {
@@ -35,12 +33,14 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public List<Farm> getAllFarms() {
-        return farmRepository.findAll();
+    public Page<Farm> getAllFarms(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return farmRepository.findAll(pageable);
     }
 
     @Override
-    public List<Farm> searchFarms(String search) {
-        return farmRepository.searchFarms(search);
+    public Page<Farm> searchFarms(String search, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return farmRepository.searchFarms(search, pageable);
     }
 }

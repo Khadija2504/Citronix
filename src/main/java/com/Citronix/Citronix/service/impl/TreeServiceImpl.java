@@ -5,6 +5,9 @@ import com.Citronix.Citronix.model.Tree;
 import com.Citronix.Citronix.repository.TreeRepository;
 import com.Citronix.Citronix.service.TreeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,8 +38,9 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public List<Tree> getTrees() {
-        return treeRepository.findAll();
+    public Page<Tree> getTrees(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return treeRepository.findAll(pageable);
     }
 
     @Override

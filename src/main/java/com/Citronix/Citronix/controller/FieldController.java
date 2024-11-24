@@ -8,6 +8,7 @@ import com.Citronix.Citronix.service.FarmService;
 import com.Citronix.Citronix.service.FieldService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -75,8 +76,9 @@ public class FieldController {
     }
 
     @GetMapping("/allFields")
-    public ResponseEntity<?> getAllFields() {
-        List<Field> fields = fieldService.getFields();
+    public ResponseEntity<?> getAllFields(@RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "1") int size) {
+        Page<Field> fields = fieldService.getFields(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(fields);
     }
 }
