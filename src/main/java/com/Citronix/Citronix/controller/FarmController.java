@@ -6,9 +6,9 @@ import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.service.FarmService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequestMapping("/api/farm")
-@Controller
+@RestController
 public class FarmController {
     @Autowired
     private FarmService farmService;
@@ -57,15 +57,17 @@ public class FarmController {
     }
 
     @GetMapping("/getAllFarms")
-    public ResponseEntity<?> getAllFarms(){
-        List<Farm> farms = farmService.getAllFarms();
+    public ResponseEntity<?> getAllFarms(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "1") int size){
+        Page<Farm> farms = farmService.getAllFarms(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(farms);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchFarm(@RequestParam String search) {
+    public ResponseEntity<?> searchFarm(@RequestParam String search, @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "1") int size) {
 
-        List<Farm> farms = farmService.searchFarms(search);
+        Page<Farm> farms = farmService.searchFarms(search, page, size);
 
         return farms.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No farms found for " + search)

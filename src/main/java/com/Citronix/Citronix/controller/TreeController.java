@@ -9,6 +9,7 @@ import com.Citronix.Citronix.service.TreeService;
 import com.Citronix.Citronix.util.CalcTreeAgeUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -50,8 +51,9 @@ public class TreeController {
     }
 
     @GetMapping("/displayAllTrees")
-    public ResponseEntity<?> displayAllTrees() {
-        List<Tree> trees = treeService.getTrees();
+    public ResponseEntity<?> displayAllTrees(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "1") int size) {
+        Page<Tree> trees = treeService.getTrees(page, size);
         List<TreeDTO> treeDTOs = trees.stream()
                 .map(CalcTreeAgeUtil::productivity)
                 .collect(Collectors.toList());

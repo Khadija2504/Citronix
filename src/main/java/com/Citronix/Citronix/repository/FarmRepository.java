@@ -1,6 +1,8 @@
 package com.Citronix.Citronix.repository;
 
 import com.Citronix.Citronix.model.Farm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +16,7 @@ public interface FarmRepository extends JpaRepository<Farm, Integer> {
             "OR f.location LIKE CONCAT('%', :query, '%') " +
             "OR (CAST(f.creationDate AS string) LIKE CONCAT('%', :query, '%')) " +
             "OR (CAST(f.area AS string) LIKE CONCAT('%', :query, '%'))")
-    List<Farm> searchFarms(String query);
+    Page<Farm> searchFarms(String query, Pageable pageable);
 
     List<Farm> findFarmByCreationDate(LocalDate creationDate);
 

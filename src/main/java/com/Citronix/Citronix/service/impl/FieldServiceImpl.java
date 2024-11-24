@@ -5,6 +5,9 @@ import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.repository.FieldRepository;
 import com.Citronix.Citronix.service.FieldService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,8 +54,9 @@ public class FieldServiceImpl implements FieldService {
 
 
     @Override
-    public List<Field> getFields() {
-        return fieldRepository.findAll();
+    public Page<Field> getFields(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return fieldRepository.findAll(pageable);
     }
 
     @Override

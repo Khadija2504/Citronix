@@ -7,6 +7,7 @@ import com.Citronix.Citronix.service.HarvestService;
 import com.Citronix.Citronix.service.SaleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -57,8 +58,9 @@ public class SaleController {
     }
 
     @GetMapping("/viewSalesHistory")
-    public ResponseEntity<?> viewSalesHistory() {
-        List<Sale> sales = saleService.getAllSales();
+    public ResponseEntity<?> viewSalesHistory(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "1") int size) {
+        Page<Sale> sales = saleService.getAllSales(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(sales);
     }
 }

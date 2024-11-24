@@ -4,6 +4,9 @@ import com.Citronix.Citronix.model.Sale;
 import com.Citronix.Citronix.repository.SaleRepository;
 import com.Citronix.Citronix.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +37,8 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public List<Sale> getAllSales() {
-        return saleRepository.findAll();
+    public Page<Sale> getAllSales(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return saleRepository.findAll(pageable);
     }
 }

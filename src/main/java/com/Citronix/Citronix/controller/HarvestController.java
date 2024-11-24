@@ -7,6 +7,7 @@ import com.Citronix.Citronix.service.FieldService;
 import com.Citronix.Citronix.service.HarvestService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -76,8 +77,9 @@ public class HarvestController {
     }
 
     @GetMapping("/displayAllHarvests")
-    public ResponseEntity<?> displayAllHarvests() {
-        List<Harvest> harvests = harvestService.displayAll();
+    public ResponseEntity<?> displayAllHarvests(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "1") int size) {
+        Page<Harvest> harvests = harvestService.displayAll(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(harvests);
     }
 }
