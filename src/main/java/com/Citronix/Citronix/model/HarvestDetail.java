@@ -7,6 +7,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class HarvestDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
