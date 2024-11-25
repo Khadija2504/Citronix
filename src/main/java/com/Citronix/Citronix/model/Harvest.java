@@ -1,12 +1,10 @@
 package com.Citronix.Citronix.model;
 
 import com.Citronix.Citronix.model.enums.Season;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Data
