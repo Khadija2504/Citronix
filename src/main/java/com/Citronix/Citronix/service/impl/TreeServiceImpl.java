@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.model.Tree;
 import com.Citronix.Citronix.repository.TreeRepository;
@@ -58,7 +59,7 @@ public class TreeServiceImpl implements TreeService {
 
     @Override
     public Tree getTree(int id) {
-        return treeRepository.findById(id).orElseThrow(() -> new RuntimeException("Field not found"));
+        return treeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("tree not found"));
     }
 
     @Override

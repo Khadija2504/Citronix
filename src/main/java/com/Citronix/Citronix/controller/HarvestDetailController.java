@@ -2,6 +2,7 @@ package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.HarvestDTO;
 import com.Citronix.Citronix.dto.HarvestDetailDTO;
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.mapper.HarvestDetailMapper;
 import com.Citronix.Citronix.model.Harvest;
 import com.Citronix.Citronix.model.HarvestDetail;
@@ -56,7 +57,7 @@ public class HarvestDetailController {
     }
 
     @PutMapping("/{id}/updateHarvestDetail")
-    public ResponseEntity<?> updateHarvestDetail(@Valid @RequestBody HarvestDetailDTO harvestDetailDTO, BindingResult result, @PathVariable int id) {
+    public ResponseEntity<?> updateHarvestDetail(@Valid @RequestBody HarvestDetailDTO harvestDetailDTO, BindingResult result, @PathVariable int id) throws EntityNotFoundException {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())

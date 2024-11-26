@@ -1,6 +1,9 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.FieldDTO;
+import com.Citronix.Citronix.exception.EntityInvalidFarmException;
+import com.Citronix.Citronix.exception.EntityInvalidFieldArea;
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.mapper.FieldMapper;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.model.Field;
@@ -29,7 +32,7 @@ public class FieldController {
     private FieldMapper fieldMapper;
 
     @PostMapping("/addField")
-    public ResponseEntity<?> addField(@Valid @RequestBody FieldDTO fieldDTO, BindingResult result) {
+    public ResponseEntity<?> addField(@Valid @RequestBody FieldDTO fieldDTO, BindingResult result) throws EntityInvalidFarmException, EntityInvalidFieldArea {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -52,7 +55,7 @@ public class FieldController {
     }
 
     @PutMapping("/{fieldId}/updateField")
-    public ResponseEntity<?> updateField(@Valid @RequestBody FieldDTO fieldDTO, BindingResult result, @PathVariable int fieldId) {
+    public ResponseEntity<?> updateField(@Valid @RequestBody FieldDTO fieldDTO, BindingResult result, @PathVariable int fieldId) throws EntityNotFoundException {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())

@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.model.Sale;
 import com.Citronix.Citronix.repository.SaleRepository;
 import com.Citronix.Citronix.service.SaleService;
@@ -33,7 +34,7 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public Sale getSale(int id) {
-        return saleRepository.findById(id).get();
+        return saleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("sale not found"));
     }
 
     @Override

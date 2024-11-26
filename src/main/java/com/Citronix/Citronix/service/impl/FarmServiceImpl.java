@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.repository.FarmRepository;
 import com.Citronix.Citronix.service.FarmService;
@@ -19,7 +20,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public Farm getFarmById(int farmId) {
-        return farmRepository.findById(farmId).orElseThrow(() -> new RuntimeException("Farm not found"));
+        return farmRepository.findById(farmId).orElseThrow(() -> new EntityNotFoundException("Farm not found"));
     }
 
     @Override

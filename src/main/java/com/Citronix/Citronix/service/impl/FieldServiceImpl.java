@@ -1,5 +1,8 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityInvalidFarmException;
+import com.Citronix.Citronix.exception.EntityInvalidFieldArea;
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.repository.FieldRepository;
@@ -22,15 +25,15 @@ public class FieldServiceImpl implements FieldService {
         Farm farm = field.getFarm();
 
         if (farm == null) {
-            throw new IllegalArgumentException("Field must be associated with a valid farm.");
+            throw new EntityInvalidFarmException("Field must be associated with a valid farm");
         }
 
         if (field.getArea() < 0.1) {
-            throw new IllegalArgumentException("the field must have an area of at least 0.1 hec");
+            throw new EntityInvalidFieldArea("the field must have an area of at least 0.1 hec");
         }
 
         if (field.getArea() > (farm.getArea() / 2)) {
-            throw new IllegalArgumentException("the field must not exceed 50% of the total farm's area");
+            throw new EntityInvalidFieldArea("the field must not exceed 50% of the total farm's area");
         }
 
         List<Field> fields = fieldRepository.findByFarm(farm);
@@ -61,6 +64,7 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public Field updateField(int id, Field field) {
+        Field fieldFind = getField(id);
         Farm farm = field.getFarm();
 
         if (farm == null) {
@@ -86,7 +90,6 @@ public class FieldServiceImpl implements FieldService {
         if (totalFieldsArea + field.getArea() > farm.getArea()) {
             throw new IllegalArgumentException("The total area of fields exceeds the farm's area.");
         }
-        Field fieldFind = getField(id);
         fieldFind.setArea(field.getArea());
         fieldFind.setFarm(field.getFarm());
         return fieldRepository.save(fieldFind);
@@ -94,6 +97,6 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public Field getField(int id) {
-        return fieldRepository.getReferenceById(id);
+        return fieldRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("field not found"));
     }
 }

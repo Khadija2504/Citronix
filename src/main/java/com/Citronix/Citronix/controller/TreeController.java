@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.TreeDTO;
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.mapper.TreeMapper;
 import com.Citronix.Citronix.model.Tree;
 import com.Citronix.Citronix.model.enums.TreeStatus;
@@ -62,7 +63,7 @@ public class TreeController {
     }
 
     @PutMapping("/{treeId}/updateTree")
-    public ResponseEntity<?> updateTree(@Valid @RequestBody TreeDTO treeDTO, BindingResult result, @PathVariable int treeId) {
+    public ResponseEntity<?> updateTree(@Valid @RequestBody TreeDTO treeDTO, BindingResult result, @PathVariable int treeId) throws EntityNotFoundException {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())

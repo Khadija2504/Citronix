@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.model.HarvestDetail;
 import com.Citronix.Citronix.repository.HarvestDetailRepository;
 import com.Citronix.Citronix.repository.HarvestRepository;
@@ -34,7 +35,7 @@ public class HarvestDetailServiceImpl implements HarvestDetailService {
 
     @Override
     public HarvestDetail getHarvestDetail(int id) {
-        return harvestDetailRepository.findById(id).get();
+        return harvestDetailRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Harvest detail not found"));
     }
 
     @Override
