@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.SaleDTO;
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.mapper.SaleMapper;
 import com.Citronix.Citronix.model.Sale;
 import com.Citronix.Citronix.service.HarvestService;
@@ -43,7 +44,7 @@ public class SaleController {
     }
 
     @PutMapping("/{id}/updateSale")
-    public ResponseEntity<?> updateSale(@Valid @RequestBody SaleDTO saleDTO, BindingResult result, @PathVariable int id) {
+    public ResponseEntity<?> updateSale(@Valid @RequestBody SaleDTO saleDTO, BindingResult result, @PathVariable int id) throws EntityNotFoundException {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())

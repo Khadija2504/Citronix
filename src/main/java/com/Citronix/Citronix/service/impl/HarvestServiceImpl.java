@@ -1,5 +1,6 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.model.Harvest;
 import com.Citronix.Citronix.repository.HarvestRepository;
 import com.Citronix.Citronix.service.HarvestService;
@@ -27,12 +28,12 @@ public class HarvestServiceImpl implements HarvestService {
 
     @Override
     public Harvest getHarvestById(int id) {
-        return harvestRepository.findById(id).get();
+        return harvestRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Harvest not found"));
     }
 
     @Override
-    public Harvest updateHarvest(int Id, Harvest harvest) {
-        Harvest oldHarvest = harvestRepository.findById(Id).get();
+    public Harvest updateHarvest(int id, Harvest harvest) {
+        Harvest oldHarvest = getHarvestById(id);
         int year = harvest.getHarvestDate().getYear();
         boolean exists = harvestRepository.existsByFieldAndSeasonAndYear(harvest.getField(), harvest.getSeason(), year);
         if (exists) {

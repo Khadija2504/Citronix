@@ -1,6 +1,7 @@
 package com.Citronix.Citronix.controller;
 
 import com.Citronix.Citronix.dto.FarmDTO;
+import com.Citronix.Citronix.exception.EntityNotFoundException;
 import com.Citronix.Citronix.mapper.FarmMapper;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.service.FarmService;
@@ -42,7 +43,7 @@ public class FarmController {
     }
 
     @PutMapping("/{farmId}/updateFarm")
-    public ResponseEntity<?> updateFarm(@Valid @RequestBody FarmDTO farmDTO, BindingResult result, @PathVariable int farmId) {
+    public ResponseEntity<?> updateFarm(@Valid @RequestBody FarmDTO farmDTO, BindingResult result, @PathVariable int farmId) throws EntityNotFoundException {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
