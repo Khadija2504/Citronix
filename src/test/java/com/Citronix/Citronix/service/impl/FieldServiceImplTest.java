@@ -1,5 +1,7 @@
 package com.Citronix.Citronix.service.impl;
 
+import com.Citronix.Citronix.exception.EntityInvalidFarmException;
+import com.Citronix.Citronix.exception.EntityInvalidFieldArea;
 import com.Citronix.Citronix.model.Farm;
 import com.Citronix.Citronix.model.Field;
 import com.Citronix.Citronix.repository.FieldRepository;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
         import static org.mockito.Mockito.*;
@@ -63,9 +66,9 @@ class FieldServiceImplTest {
     void testAddField_NoFarm() {
         mockField.setFarm(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> fieldService.addField(mockField));
+        EntityInvalidFarmException exception = assertThrows(EntityInvalidFarmException.class, () -> fieldService.addField(mockField));
 
-        assertEquals("Field must be associated with a valid farm.", exception.getMessage());
+        assertEquals("Field must be associated with a valid farm", exception.getMessage());
         verify(fieldRepository, never()).save(any(Field.class));
     }
 
@@ -73,7 +76,7 @@ class FieldServiceImplTest {
     void testAddField_AreaTooSmall() {
         mockField.setArea(0.05);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> fieldService.addField(mockField));
+        EntityInvalidFieldArea exception = assertThrows(EntityInvalidFieldArea.class, () -> fieldService.addField(mockField));
 
         assertEquals("the field must have an area of at least 0.1 hec", exception.getMessage());
         verify(fieldRepository, never()).save(any(Field.class));
@@ -118,27 +121,31 @@ class FieldServiceImplTest {
         updatedField.setArea(3.0);
         updatedField.setFarm(mockFarm);
 
-        when(fieldRepository.getReferenceById(1)).thenReturn(mockField);
+        Field existingField = new Field();
+        existingField.setId(1);
+        existingField.setArea(2.0);
+        existingField.setFarm(mockFarm);
+
+        when(fieldRepository.findById(1)).thenReturn(Optional.of(existingField));
         when(fieldRepository.findByFarm(mockFarm)).thenReturn(new ArrayList<>());
-        when(fieldRepository.save(mockField)).thenReturn(mockField);
+        when(fieldRepository.save(existingField)).thenReturn(existingField);
 
         Field result = fieldService.updateField(1, updatedField);
 
-        verify(fieldRepository, times(1)).getReferenceById(1);
+        verify(fieldRepository, times(1)).findById(1); // Mock for findById
         verify(fieldRepository, times(1)).findByFarm(mockFarm);
-        verify(fieldRepository, times(1)).save(mockField);
-
+        verify(fieldRepository, times(1)).save(existingField);
         assertNotNull(result);
         assertEquals(3.0, result.getArea());
     }
 
     @Test
     void testGetField() {
-        when(fieldRepository.getReferenceById(1)).thenReturn(mockField);
+        when(fieldRepository.findById(1)).thenReturn(Optional.of(mockField));
 
         Field result = fieldService.getField(1);
 
-        verify(fieldRepository, times(1)).getReferenceById(1);
+        verify(fieldRepository, times(1)).findById(1);
 
         assertNotNull(result);
         assertEquals(mockField.getId(), result.getId());
